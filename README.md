@@ -1,3 +1,22 @@
+# Objective
+
+In this repo I'm trying to reproduce the results from this Blog, [Segment Anything, Fast](https://pytorch.org/blog/accelerating-generative-ai/).
+
+1. It's an attempt to understand how people at meta work and think about problems.
+2. Deepen  my understanding of the SAM architecture and how it works.
+3. Getting Closer to the GPU Operations and how they work.
+4. Building an intuition for the effects of each optimization affects speed and accuracy.
+5. Get accustomed to the Torch Profiler API and GPU Monitoring tools.
+
+## Model Implemenation
+
+The file `segment_anything/build_sam.py` uses a class called **SAM** which takes as input:
+1. `ImageEncoderViT` which probably just builds the Google's ViT model (I'm familiar with this part)
+2. `PromptEncoder` returns a dense and sparse embeddings of the prompt. (need to understand what it does)
+3. `MaskDecoder` Predicts the mask given an image and the prompt embeddings. (need to understand how it's predicting the mask)
+
+
+
 # Segment Anything
 
 **[Meta AI Research, FAIR](https://ai.facebook.com/research/)**
