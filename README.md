@@ -1,6 +1,6 @@
 # Objective
 
-In this repo I'm trying to reproduce the results from this Blog, [Segment Anything, Fast](https://pytorch.org/blog/accelerating-generative-ai/).
+In this repo I'm trying to reproduce the results from this Blog, [Segment Anything, Fast](https://pytorch.org/blog/accelerating-generative-ai/), Starting from the original repo at [Segment Anything](https://github.com/facebookresearch/segment-anything).
 
 1. It's an attempt to understand how people at meta work and think about problems.
 2. Deepen  my understanding of the SAM architecture and how it works.
@@ -14,6 +14,13 @@ The file `segment_anything/build_sam.py` uses a class called **SAM** which takes
 1. `ImageEncoderViT` which probably just builds the Google's ViT model (I'm familiar with this part)
 2. `PromptEncoder` returns a dense and sparse embeddings of the prompt. (need to understand what it does)
 3. `MaskDecoder` Predicts the mask given an image and the prompt embeddings. (need to understand how it's predicting the mask)
+
+## Profiling
+
+To profile the code, I used Torch Profiler API and generated a trace report to visualize on Chrome's Trace Viewer.
+1. Run the `python scripts/profile.py`, update the model path and type in the script, other than that it's using the demo images.
+2. To use the generated file, open `chrome://tracing/` in your browser and load the file.
+3. To understand the tracer and how to use it I'd recommend this [Brief Blog Post](https://nolanlawson.com/2022/10/26/a-beginners-guide-to-chrome-tracing/)
 
 
 
