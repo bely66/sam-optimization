@@ -106,9 +106,6 @@ class MaskDecoder(nn.Module):
             mask_slice = slice(0, 1)
         masks = masks[:, mask_slice, :, :]
         iou_pred = iou_pred[:, mask_slice]
-        print("Sparse prompt embeddings dtype: ", sparse_prompt_embeddings.dtype)
-        if sparse_prompt_embeddings.dtype != self_dtype:
-            return masks.to(sparse_prompt_embeddings.dtype), iou_pred.to(sparse_prompt_embeddings.dtype)
 
         # Prepare output
         return masks, iou_pred

@@ -160,6 +160,9 @@ class SamPredictor:
             multimask_output,
             return_logits=return_logits,
         )
+        # check if iou_predictions, low_res_masks_np is the correct float type
+        iou_predictions = iou_predictions.to(torch.float32)
+        low_res_masks = low_res_masks.to(torch.float32)
         masks_np = masks[0].detach().cpu().numpy()
         iou_predictions_np = iou_predictions[0].detach().cpu().numpy()
         low_res_masks_np = low_res_masks[0].detach().cpu().numpy()
