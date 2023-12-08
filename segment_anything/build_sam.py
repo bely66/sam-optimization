@@ -11,36 +11,53 @@ from functools import partial
 from .modeling import ImageEncoderViT, MaskDecoder, PromptEncoder, Sam, TwoWayTransformer
 
 
-def build_sam_vit_h(checkpoint=None):
+def _apply_eval_dtype_sam(model, dtype):
+
+    def prep_model(model, dtype):
+        if dtype is not None:
+            return model.eval().to(dtype)
+        return model.eval()
+
+    model.image_encoder = prep_model(model.image_encoder, dtype)
+    model.prompt_encoder = prep_model(model.prompt_encoder, dtype)
+    model.mask_decoder = prep_model(model.mask_decoder, dtype)
+
+    return model
+
+def build_sam_vit_h(checkpoint=None, dtype=None):
     return _build_sam(
         encoder_embed_dim=1280,
         encoder_depth=32,
         encoder_num_heads=16,
         encoder_global_attn_indexes=[7, 15, 23, 31],
         checkpoint=checkpoint,
+        dtype=dtype,
     )
 
 
 build_sam = build_sam_vit_h
 
 
-def build_sam_vit_l(checkpoint=None):
+
+def build_sam_vit_l(checkpoint=None, dtype=None):
     return _build_sam(
         encoder_embed_dim=1024,
         encoder_depth=24,
         encoder_num_heads=16,
         encoder_global_attn_indexes=[5, 11, 17, 23],
         checkpoint=checkpoint,
+        dtype=dtype,
     )
 
 
-def build_sam_vit_b(checkpoint=None):
+def build_sam_vit_b(checkpoint=None, dtype=None):
     return _build_sam(
         encoder_embed_dim=768,
         encoder_depth=12,
         encoder_num_heads=12,
         encoder_global_attn_indexes=[2, 5, 8, 11],
         checkpoint=checkpoint,
+        dtype=dtype,
     )
 
 
@@ -58,6 +75,7 @@ def _build_sam(
     encoder_num_heads,
     encoder_global_attn_indexes,
     checkpoint=None,
+    dtype=None,
 ):
     prompt_embed_dim = 256
     image_size = 1024
@@ -104,4 +122,5 @@ def _build_sam(
         with open(checkpoint, "rb") as f:
             state_dict = torch.load(f)
         sam.load_state_dict(state_dict)
+    sam = _apply_eval_dtype_sam(sam, dtype)
     return sam

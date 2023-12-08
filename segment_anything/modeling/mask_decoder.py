@@ -91,6 +91,7 @@ class MaskDecoder(nn.Module):
           torch.Tensor: batched predicted masks
           torch.Tensor: batched predictions of mask quality
         """
+        self_dtype = self.iou_prediction_head.layers[0].weight.dtype
         masks, iou_pred = self.predict_masks(
             image_embeddings=image_embeddings,
             image_pe=image_pe,
@@ -105,6 +106,9 @@ class MaskDecoder(nn.Module):
             mask_slice = slice(0, 1)
         masks = masks[:, mask_slice, :, :]
         iou_pred = iou_pred[:, mask_slice]
+        print("Sparse prompt embeddings dtype: ", sparse_prompt_embeddings.dtype)
+        if sparse_prompt_embeddings.dtype != self_dtype:
+            return masks.to(sparse_prompt_embeddings.dtype), iou_pred.to(sparse_prompt_embeddings.dtype)
 
         # Prepare output
         return masks, iou_pred

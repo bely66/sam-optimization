@@ -86,7 +86,8 @@ class SamPredictor:
         self.original_size = original_image_size
         self.input_size = tuple(transformed_image.shape[-2:])
         input_image = self.model.preprocess(transformed_image)
-        self.features = self.model.image_encoder(input_image)
+        model_dtype = self.model.mask_decoder.iou_prediction_head.layers[0].weight.dtype
+        self.features = self.model.image_encoder(input_image.to(model_dtype))
         self.is_image_set = True
 
     def predict(
@@ -159,7 +160,6 @@ class SamPredictor:
             multimask_output,
             return_logits=return_logits,
         )
-
         masks_np = masks[0].detach().cpu().numpy()
         iou_predictions_np = iou_predictions[0].detach().cpu().numpy()
         low_res_masks_np = low_res_masks[0].detach().cpu().numpy()
