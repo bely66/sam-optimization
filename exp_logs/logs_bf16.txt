@@ -1,4 +1,4 @@
-Average Elapsed Time Per Picture: 6.479753875732422
-Average FPS: 154.32684931832657
-Memory(MiB): 2770
-Memory(%): 12
+Average Elapsed Time Per Picture: 1542.64248046875
+Average FPS: 0.6482383395121716
+Memory(MiB): 1408
+Memory(%): 6

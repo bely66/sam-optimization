@@ -23,6 +23,22 @@ To profile the code, I used Torch Profiler API and generated a trace report to v
 3. To understand the tracer and how to use it I'd recommend this [Brief Blog Post](https://nolanlawson.com/2022/10/26/a-beginners-guide-to-chrome-tracing/)
 
 
+## GPU Quantization and Removing Synced Operations
+In this stage I converted the model to torch.bfloat16 and removed operations causing GPU Syncs.
+Operations causing GPU Syncs are:
+1. Building a new tensor withouth specifying the device, torch will default to CPU and then move it to GPU.
+2. Using Indexing on a tensor, torch will default to CPU and then move it to GPU (Using Torch.where() instead of []).
+
+P.S. To understand bfloat16 and how it works, I'd recommend this [Blog Post](https://pytorch.org/blog/empowering-pytorch-on-intel-xeon-scalable-processors-with-bfloat16/)
+
+
+Seems like these operations caused some improvements on the model speed however not as expected as it seems that batch size is the main factor in the speed of the model.
+
+So we need to implement batched operations to improve the speed of the model.
+
+## Implementing Batched Operations
+
+
 
 # Segment Anything
 
